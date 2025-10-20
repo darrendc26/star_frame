@@ -22,15 +22,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Verify tools are available
+      - name: Install Rust
         run: |
-          solana --version
-          cargo-build-sbf --help || true
-          cargo build-sbf --help || true
-          rustup target list | grep sbf || true
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          rustup target add bpfel-unknown-unknown
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          solana-install init
 
       - name: Install sf CLI
-        run: cd star_frame_cli && cargo install --path .
+        run: |
+          cd star_frame_cli
+          cargo install --path .
 
       - name: Generate test project
         run: sf new test_project
