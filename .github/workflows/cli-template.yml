@@ -24,10 +24,15 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: Install Solana
+        - name: Install Solana
         run: |
           sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Install Solana BPF tools
+        run: |
+          cargo install cargo-build-sbf
+          cargo install cargo-test-sbf
 
       - name: Install sf CLI
         run: cargo install --path star_frame_cli
