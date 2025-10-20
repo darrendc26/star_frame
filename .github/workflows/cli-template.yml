@@ -37,11 +37,10 @@ jobs:
         with:
           tool: cargo-release@0.25.17
 
-      - name: Install Solana CLI
+      - name: Verify Solana installation
         run: |
-          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
-          solana-install init
+          solana --version
+          cargo --version
 
       - name: Install sf CLI
         run: |
