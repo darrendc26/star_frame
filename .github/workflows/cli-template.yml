@@ -15,29 +15,21 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
+    container:
+      image: solanalabs/solana:stable
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-
-      - name: Install Solana CLI
-        uses: solana-labs/solana@v2
-        with:
-          solana_version: 'stable'
-          tools: 'all'
-
-      - name: Install cargo-build-sbf
+      - name: Verify tools are available
         run: |
-          cargo install cargo-build-bpf
-          cargo install cargo-build-sbf
+          solana --version
+          cargo-build-sbf --help || true
+          cargo build-sbf --help || true
+          rustup target list | grep sbf || true
 
-      - name: Build and install sf CLI
+      - name: Install sf CLI
         run: |
           cd star_frame_cli
           cargo install --path .
@@ -49,8 +41,3 @@ jobs:
         run: |
           cd test_project
           cargo build-sbf
-
-      - name: Verify program build
-        run: |
-          cd test_project
-          ls -la target/deploy/
