@@ -1,11 +1,13 @@
-name: cli-template
+name: CLI Template CI
 
 on:
   push:
+    branches: ['**']           # Run on any branch
     paths:
       - "star_frame_cli/**"
       - "star_frame_cli/src/template/**"
   pull_request:
+    branches: ['**']           # Run on any branch
     paths:
       - "star_frame_cli/**"
       - "star_frame_cli/src/template/**"
@@ -13,32 +15,30 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/solana-labs/solana:v1.26.18  # Solana prebuilt with SBF tools
+
     steps:
-      - name: Checkout
+      # Step 1: Checkout the repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Install Rust stable
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
 
-      - name: Install Solana
-        run: |
-          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
-
-      - name: Install Solana BPF tools
-        run: |
-          cargo install cargo-build-sbf
-          cargo install cargo-test-sbf
-
+      # Step 3: Install your CLI from the crate
       - name: Install sf CLI
         run: cargo install --path star_frame_cli
 
+      # Step 4: Generate a test project from template
       - name: Generate test project
         run: sf new test_project
 
+      # Step 5: Build the generated project using SBF
       - name: Build generated project
         run: |
           cd test_project
