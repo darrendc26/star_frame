@@ -27,3 +27,4 @@ impl AccountValidate<Authority> for CounterAccount {
         Ok(())
     }
 }
+// TODO: Add more validations
