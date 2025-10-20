@@ -28,4 +28,3 @@ impl AccountValidate<Authority> for CounterAccount {
     }
 }
 
-// TODO: Add more state types here
