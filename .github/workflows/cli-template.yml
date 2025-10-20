@@ -30,9 +30,7 @@ jobs:
           rustup target list | grep sbf || true
 
       - name: Install sf CLI
-        run: |
-          cd star_frame_cli
-          cargo install --path .
+        run: cargo install --path star_frame_cli
 
       - name: Generate test project
         run: sf new test_project
