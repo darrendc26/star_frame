@@ -24,6 +24,7 @@ impl AccountValidate<Authority> for CounterAccount {
             "Incorrect authority",
             {name_pascalcase}Error::IncorrectAuthority
         );
+        
         Ok(())
     }
 }
