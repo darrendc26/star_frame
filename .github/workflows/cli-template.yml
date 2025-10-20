@@ -1,0 +1,33 @@
+name: cli-template
+
+on:
+  push:
+    branches:
+      - 'star_frame_cli/**'
+  pull_request:
+    branches:
+      - 'star_frame_cli/**'
+
+jobs:
+  cli-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install sf CLI
+        run: cargo install --path star_frame_cli
+
+      - name: Generate test project
+        run: sf new test_project
+
+      - name: Build generated project
+        run: |
+          cd test_project
+          cargo build-sbf
