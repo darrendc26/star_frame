@@ -48,9 +48,11 @@ jobs:
           cargo install --path .
 
       - name: Generate test project
-        run: sf new test_project
+        run: |
+          cd /tmp
+          sf new test_project
 
       - name: Build generated project
         run: |
-          cd test_project
+          cd /tmp/test_project
           cargo build-sbf
