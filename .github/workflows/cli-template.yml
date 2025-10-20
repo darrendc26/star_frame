@@ -2,11 +2,14 @@ name: cli-template
 
 on:
   push:
-    branches:
-      - 'star_frame_cli/**'
+    paths:
+      - "star_frame_cli/**"
+      - "star_frame_cli/src/template/**"
   pull_request:
-    branches:
-      - 'star_frame_cli/**'
+    paths:
+      - "star_frame_cli/**"
+      - "star_frame_cli/src/template/**"
+
 
 jobs:
   cli-template:
