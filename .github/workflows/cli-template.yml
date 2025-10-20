@@ -33,8 +33,10 @@ jobs:
           cache: 'false'
           toolchain: stable
       
-      - name: Set default Rust toolchain
-        run: rustup default stable
+      - name: Set default Rust toolchain and update
+        run: |
+          rustup default stable
+          rustup update stable
 
       - name: Install cargo-release
         uses: taiki-e/install-action@v2
@@ -59,4 +61,5 @@ jobs:
       - name: Build generated project
         run: |
           cd /tmp/test_project
+          rm -f Cargo.lock
           cargo build-sbf
