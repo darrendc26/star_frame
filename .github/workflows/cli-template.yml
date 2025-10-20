@@ -24,6 +24,11 @@ jobs:
           toolchain: stable
           override: true
 
+      - name: Install Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
       - name: Install sf CLI
         run: cargo install --path star_frame_cli
 
