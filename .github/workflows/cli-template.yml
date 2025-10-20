@@ -1,3 +1,70 @@
+# name: CLI Template CI
+
+# on:
+#   push:
+#     branches: ['**']
+#     paths:
+#       - "star_frame_cli/**"
+#       - "star_frame_cli/src/template/**"
+#   pull_request:
+#     branches: ['**']
+#     paths:
+#       - "star_frame_cli/**"
+#       - "star_frame_cli/src/template/**"
+
+# jobs:
+#   cli-template:
+#     runs-on: ubuntu-latest
+#     container:
+#       image: solanalabs/solana:stable
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Install dependencies
+#         run: |
+#           apt-get update
+#           apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
+
+#       - name: Setup Rust
+#         uses: actions-rust-lang/setup-rust-toolchain@v1
+#         with:
+#           cache: 'false'
+#           toolchain: stable
+      
+#       - name: Set default Rust toolchain and update
+#         run: |
+#           rustup default stable
+#           rustup update stable
+
+#       - name: Install cargo-release
+#         uses: taiki-e/install-action@v2
+#         with:
+#           tool: cargo-release@0.25.17
+
+#       - name: Verify Solana installation
+#         run: |
+#           solana --version
+#           cargo --version
+
+#       - name: Install sf CLI
+#         run: |
+#           cd star_frame_cli
+#           cargo install --path .
+
+#       - name: Generate test project
+#         run: |
+#           cd /tmp
+#           sf new test_project
+
+#       - name: Build generated project
+#         run: |
+#           cd /tmp/test_project
+#           rm -f Cargo.lock
+#           cargo build-sbf
+
+
 name: CLI Template CI
 
 on:
@@ -15,47 +82,39 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    container:
-      image: solanalabs/solana:stable
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
-
       - name: Install latest Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-          rustup default stable
-          rustup update stable
-          rustup component add rustfmt clippy
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Install Solana CLI
+        uses: solana-labs/solana@v2
+        with:
+          solana_version: 'stable'
+          tools: 'all'
 
       - name: Verify installations
         run: |
-          source $HOME/.cargo/env
           solana --version
           cargo --version
           rustc --version
 
       - name: Install sf CLI
         run: |
-          source $HOME/.cargo/env
           cd star_frame_cli
           cargo install --path .
 
       - name: Generate test project
         run: |
-          source $HOME/.cargo/env
-          cd /tmp
           sf new test_project
 
       - name: Build generated project
         run: |
-          source $HOME/.cargo/env
-          cd /tmp/test_project
+          cd test_project
           cargo build-sbf
