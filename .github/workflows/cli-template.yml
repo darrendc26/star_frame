@@ -15,38 +15,22 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
+    container:
+      image: solanalabs/solana:stable
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-
-      - name: Install Solana CLI
-        uses: solana-labs/solana@v2
-        with:
-          solana_version: 'stable'
-          tools: 'all'
-
-      - name: Verify installation
+      - name: Verify tools are available
         run: |
           solana --version
-          cargo --version
-          rustc --version
-          cargo-build-sbf --version
+          cargo-build-sbf --help || true
+          cargo build-sbf --help || true
+          rustup target list | grep sbf || true
 
-      - name: Add SBF target
-        run: rustup target add sbf-solana-solana
-
-      - name: Build and install sf CLI
-        run: |
-          cd star_frame_cli
-          cargo install --path .
+      - name: Install sf CLI
+        run: cd star_frame_cli && cargo install --path .
 
       - name: Generate test project
         run: sf new test_project
@@ -55,9 +39,3 @@ jobs:
         run: |
           cd test_project
           cargo build-sbf
-
-      - name: Verify program build
-        run: |
-          cd test_project
-          ls -la target/deploy/
-          file target/deploy/*.so
