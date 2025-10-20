@@ -27,3 +27,6 @@ impl AccountValidate<Authority> for CounterAccount {
         Ok(())
     }
 }
+
+
+// #[derive(Debug, GetSeeds, Clone)]
