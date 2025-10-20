@@ -1,5 +1,4 @@
 use star_frame::prelude::*;
-
 use instructions::*;
 mod instructions;
 pub mod states;
@@ -26,4 +25,3 @@ pub enum {name_pascalcase}Error {
     #[msg("Incorrect authority")]
     IncorrectAuthority,
 }
-
