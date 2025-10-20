@@ -18,13 +18,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install Solana CLI
-        run: |
-          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
-          solana-install init
+        uses: actions/checkout@v4
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -32,11 +26,21 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: Install cargo-build-sbf
-        run: cargo install cargo-build-sbf
+      - name: Install Solana CLI
+        uses: solana-labs/solana@v2
+        with:
+          solana_version: 'stable'
+          tools: 'all'
 
-      - name: Install sf CLI
-        run: cargo install --path star_frame_cli
+      - name: Install cargo-build-sbf
+        run: |
+          cargo install cargo-build-bpf
+          cargo install cargo-build-sbf
+
+      - name: Build and install sf CLI
+        run: |
+          cd star_frame_cli
+          cargo install --path .
 
       - name: Generate test project
         run: sf new test_project
@@ -45,3 +49,8 @@ jobs:
         run: |
           cd test_project
           cargo build-sbf
+
+      - name: Verify program build
+        run: |
+          cd test_project
+          ls -la target/deploy/
