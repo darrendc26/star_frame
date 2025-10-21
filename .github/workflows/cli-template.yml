@@ -61,8 +61,8 @@ jobs:
           # Delete all Cargo.lock files (main + dependencies if any)
           find /tmp/test_project -name Cargo.lock -delete
 
-      - name: Build generated project
+      - name: Build with system Cargo (bypassing Solana’s)
         run: |
           cd /tmp/test_project
-          cargo generate-lockfile
-          cargo build-sbf
+          RUSTFLAGS="-C lto=no" \
+          cargo build --target bpfel-unknown-unknown --release
