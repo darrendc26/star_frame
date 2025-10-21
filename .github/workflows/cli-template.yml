@@ -57,6 +57,12 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
 
+      - name: Install Solana BPF target
+        run: |
+          rustup toolchain add 1.90.0
+          rustup target add bpfel-unknown-unknown --toolchain 1.90.0
+
+
       - name: Build Solana program with modern Cargo
         run: |
           cd /tmp/test_project
