@@ -67,9 +67,9 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
 
-      - name: Build generated project
+      - name: Build project with modern Cargo
         run: |
           cd /tmp/test_project
-  
-          cargo generate-lockfile
-          cargo build-sbf -- -Znext-lockfile-bump 
+          cargo build --target bpfel-unknown-unknown --release
+          mkdir -p target/deploy
+          cp target/bpfel-unknown-unknown/release/*.so target/deploy/
