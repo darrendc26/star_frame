@@ -15,8 +15,8 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    container:
-      image: solanalabs/solana:edge
+    # container:
+    #   image: solanalabs/solana:edge
 
     steps:
       - name: Checkout code
@@ -32,6 +32,10 @@ jobs:
         with:
           cache: 'false'
           toolchain: 'nightly'
+
+      - name: Install Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
 
       - name: Verify Rust and Solana CLI
         run: |
