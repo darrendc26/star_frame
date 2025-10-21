@@ -16,7 +16,7 @@ jobs:
   cli-template:
     runs-on: ubuntu-latest
     container:
-      image: solanalabs/solana:edge
+      image: solanalabs/solana:1.18.26
 
 
     steps:
