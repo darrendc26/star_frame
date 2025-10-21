@@ -63,4 +63,5 @@ jobs:
         run: |
           cd /tmp/test_project
           rm -f Cargo.lock
+          cargo generate-lockfile
           cargo build-sbf
