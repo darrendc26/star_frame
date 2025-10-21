@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::{env, error::Error};
+use std::error::Error;
 use mollusk_svm::result::Check;
 use mollusk_svm::{program::keyed_account_for_system_program, Mollusk};
 use solana_account::Account as SolanaAccount;
