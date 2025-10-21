@@ -18,7 +18,6 @@ jobs:
     container:
       image: solanalabs/solana:v1.18.26
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,23 +31,14 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           cache: 'false'
-          toolchain: '1.87'  # or 'beta' or 'nightly'
+          toolchain: '1.90.0'   # Use modern Cargo that supports resolver 3
 
-      - name: Set default Rust toolchain and update
+      - name: Verify Rust and Solana CLI
         run: |
-          rustup default 1.87 # Match the toolchain above
-          rustup update
+          rustup default 1.90.0
+          rustup update 1.90.0
           cargo --version
-
-      # - name: Install cargo-release
-      #   uses: taiki-e/install-action@v2
-      #   with:
-      #     tool: cargo-release@0.25.17
-
-      - name: Verify Solana installation
-        run: |
           solana --version
-          cargo --version
 
       - name: Install sf CLI
         run: |
@@ -59,7 +49,7 @@ jobs:
         run: |
           cd /tmp
           sf new test_project
-          # Delete all Cargo.lock files (main + dependencies if any)
+          # Remove any existing lockfiles to avoid conflicts
           find /tmp/test_project -name Cargo.lock -delete
 
       - name: Set Rust edition to 2021
@@ -67,9 +57,11 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
 
-      - name: Build generated project
+      - name: Build Solana program with modern Cargo
         run: |
           cd /tmp/test_project
-  
-          cargo generate-lockfile
-          cargo build-sbf -- -Znext-lockfile-bump 
+          # Build for Solana BPF target using modern Cargo
+          cargo build --release --target bpfel-unknown-unknown
+          # Copy resulting .so to deploy folder
+          mkdir -p target/deploy
+          cp target/bpfel-unknown-unknown/release/*.so target/deploy/
