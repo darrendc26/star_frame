@@ -15,18 +15,18 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    # container:
-    #   image: solanalabs/solana:edge
+    container:
+      image: solanalabs/solana:edge
 
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Install dependencies
-      #   run: |
-      #     apt-get update
-      #     apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
 
       - name: Setup Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
@@ -44,13 +44,6 @@ jobs:
       #   uses: taiki-e/install-action@v2
       #   with:
       #     tool: cargo-release@0.25.17
-  
-      - name: Install Solana CLI
-        run: |
-          curl -O https://release.solana.com/v1.18.25/solana-release-x86_64-unknown-linux-gnu.tar.bz2
-          tar -xjf solana-release-x86_64-unknown-linux-gnu.tar.bz2
-          export PATH="$PWD/solana-release/bin:$PATH"
-          solana --version
 
       - name: Verify Solana installation
         run: |
@@ -74,9 +67,9 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
 
-      - name: Build project with modern Cargo
+      - name: Build generated project
         run: |
           cd /tmp/test_project
-          cargo build --target bpfel-unknown-unknown --release
-          mkdir -p target/deploy
-          cp target/bpfel-unknown-unknown/release/*.so target/deploy/
+  
+          cargo generate-lockfile
+          cargo build-sbf -- -Znext-lockfile-bump 
