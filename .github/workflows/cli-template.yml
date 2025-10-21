@@ -62,6 +62,11 @@ jobs:
           # Delete all Cargo.lock files (main + dependencies if any)
           find /tmp/test_project -name Cargo.lock -delete
 
+      - name: Set Rust edition to 2021
+        run: |
+          cd /tmp/test_project
+          sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
+
       - name: Build generated project
         run: |
           cd /tmp/test_project
