@@ -33,13 +33,11 @@ jobs:
           cache: 'false'
           toolchain: 'nightly'
 
-      - name: Install Solana
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl ca-certificates
-          sudo update-ca-certificates
-          curl -sSfL https://release.solana.com/stable/install | sh
-     
+      - name: Setup Solana CLI
+        uses: metadaoproject/setup-solana@v1.0
+        with:
+          solana-cli-version: '1.10.32'
+
       - name: Verify Rust and Solana CLI
         run: |
           rustup default nightly
