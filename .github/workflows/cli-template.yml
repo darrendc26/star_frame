@@ -15,7 +15,7 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,14 +25,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
 
-      - name: Setup Rust
+      - name: Setup Rust (nightly)
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: nightly
           cache: false
 
-
-      - name: Install Solana
+      - name: Install Solana CLI v1.18.26
         shell: bash
         run: |
           curl -sSfL https://github.com/solana-labs/solana/releases/download/v1.18.26/solana-release-x86_64-unknown-linux-gnu.tar.bz2 -o solana.tar.bz2
@@ -40,14 +39,15 @@ jobs:
           tar -xjf solana.tar.bz2 -C $HOME/.local/share/solana/install/active_release --strip-components=1
           echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
 
-      - name: Verify Rust and Solana CLI
+      - name: Verify Rust + Solana CLI
         shell: bash
         run: |
           source $HOME/.cargo/env
+          rustc --version
           cargo --version
           solana --version
 
-      - name: Install sf CLI
+      - name: Install Starframe CLI
         shell: bash
         run: |
           source $HOME/.cargo/env
@@ -58,6 +58,7 @@ jobs:
         shell: bash
         run: |
           source $HOME/.cargo/env
+          mkdir -p /tmp/test_project
           cd /tmp
           sf new test_project
 
@@ -69,7 +70,7 @@ jobs:
           cd /tmp/test_project
           cargo +nightly build-sbf -- -Znext-lockfile-bump
 
-      - name: Run tests
+      - name: Run Rust tests
         shell: bash
         run: |
           source $HOME/.cargo/env
