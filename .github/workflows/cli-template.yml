@@ -54,7 +54,12 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
           
-      - name: Generate lockfile with resolver 3
+      - name: Downgrade resolver for compatibility
+        run: |
+          cd /tmp/test_project
+          sed -i 's/^resolver\s*=\s*"3"/resolver = "2"/' Cargo.toml
+          
+      - name: Generate lockfile
         run: |
           cd /tmp/test_project
           cargo generate-lockfile
