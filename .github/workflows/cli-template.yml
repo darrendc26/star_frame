@@ -55,7 +55,7 @@ jobs:
       - name: Build SBF program
         run: |
           cd /tmp/test_project
-          cargo build-bpf
+          cargo +nightly build-bpf
 
       - name: Run tests
         run: |
