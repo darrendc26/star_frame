@@ -58,10 +58,11 @@ jobs:
         run: |
           cd /tmp
           sf new test_project
+          # Delete all Cargo.lock files (main + dependencies if any)
+          find /tmp/test_project -name Cargo.lock -delete
 
       - name: Build generated project
         run: |
           cd /tmp/test_project
-          rm -f Cargo.lock
           cargo generate-lockfile
           cargo build-sbf
