@@ -42,7 +42,7 @@ jobs:
       - name: Install sf CLI
         run: |
           cd star_frame_cli
-          cargo install --path .
+          RUSTFLAGS="-A warnings" cargo install --path .
 
       - name: Generate test project
         run: |
