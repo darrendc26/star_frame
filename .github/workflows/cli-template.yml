@@ -23,13 +23,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git bzip2
+          sudo apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
 
-      - name: Setup Rust Nightly >=1.92
+      - name: Setup Rust (nightly)
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: nightly-1.92
-          override: true
+          toolchain: nightly
+          cache: false
 
       - name: Install Solana CLI v1.18.26
         shell: bash
@@ -39,15 +39,15 @@ jobs:
           tar -xjf solana.tar.bz2 -C $HOME/.local/share/solana/install/active_release --strip-components=1
           echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
 
-      - name: Verify Rust and Solana CLI
+      - name: Verify Rust + Solana CLI
         shell: bash
         run: |
           source $HOME/.cargo/env
-          cargo --version
           rustc --version
+          cargo --version
           solana --version
 
-      - name: Install sf CLI
+      - name: Install Starframe CLI
         shell: bash
         run: |
           source $HOME/.cargo/env
@@ -58,35 +58,24 @@ jobs:
         shell: bash
         run: |
           source $HOME/.cargo/env
+          mkdir -p /tmp/test_project
           cd /tmp
           sf new test_project
-
-      - name: Patch resolver for CI (if needed)
-        shell: bash
-        run: |
-          source $HOME/.cargo/env
-          # Patch resolver 3 -> 2 for star_frame_proc and any other star_frame crates
-          find ~/.cargo/registry/src -name "Cargo.toml" -path "*/star_frame*/Cargo.toml" \
-              -exec sed -i 's/resolver = "3"/resolver = "2"/' {} \;
-
-      - name: Generate lockfile
-        shell: bash
-        run: |
-          source $HOME/.cargo/env
-          cd /tmp/test_project
-          cargo +nightly generate-lockfile
 
       - name: Build SBF program
         shell: bash
         run: |
+          set -euxo pipefail
           source $HOME/.cargo/env
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
           cd /tmp/test_project
-          cargo +nightly build-sbf -- -Znext-lockfile-bump
+          cargo install sbpf-linker
+          cargo +nightly build-bpf -- -Znext-lockfile-bump
 
-      - name: Run tests
+
+      - name: Run Rust tests
         shell: bash
         run: |
           source $HOME/.cargo/env
           cd /tmp/test_project
-          cargo +nightly test
+          cargo test
