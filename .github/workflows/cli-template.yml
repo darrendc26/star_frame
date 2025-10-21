@@ -16,7 +16,8 @@ jobs:
   cli-template:
     runs-on: ubuntu-latest
     container:
-      image: solanalabs/solana:v1.18.25
+      image: solanalabs/solana:edge
+
 
     steps:
       - name: Checkout code
@@ -61,8 +62,8 @@ jobs:
           # Delete all Cargo.lock files (main + dependencies if any)
           find /tmp/test_project -name Cargo.lock -delete
 
-      - name: Build with system Cargo (bypassing Solana’s)
+      - name: Build generated project
         run: |
           cd /tmp/test_project
-          RUSTFLAGS="-C lto=no" \
-          cargo build --target bpfel-unknown-unknown --release
+          cargo generate-lockfile
+          cargo build-sbf
