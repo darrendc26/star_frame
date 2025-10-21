@@ -25,47 +25,52 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl build-essential pkg-config libssl-dev ca-certificates git
 
-  #     - name: Setup Rust
-  #       uses: actions-rust-lang/setup-rust-toolchain@v1
-  #       with:
-  #         cache: 'false'
-  #         toolchain: 'nightly'
-
       - name: Install Rust
-        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          rustup default nightly
 
       - name: Install Solana
+        shell: bash
         run: |
-          curl -sSfL https://release.solana.com/v1.18.26/install | sh.
+          sh -c "$(curl -sSfL https://release.solana.com/v1.18.26/install)"
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          solana --version
 
       - name: Verify Rust and Solana CLI
+        shell: bash
         run: |
-          rustup default nightly
+          source $HOME/.cargo/env
           cargo --version
           solana --version
 
       - name: Install sf CLI
+        shell: bash
         run: |
+          source $HOME/.cargo/env
           cd star_frame_cli
           RUSTFLAGS="-A warnings" cargo install --path .
 
       - name: Generate test project
+        shell: bash
         run: |
+          source $HOME/.cargo/env
           cd /tmp
           sf new test_project
 
-      # - name: Install sbpf-linker
-      #   run: cargo install sbpf-linker     
-  
       - name: Build SBF program
+        shell: bash
         run: |
+          source $HOME/.cargo/env
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
           cd /tmp/test_project
           cargo +nightly build-sbf
 
       - name: Run tests
+        shell: bash
         run: |
+          source $HOME/.cargo/env
           cd /tmp/test_project
           cargo test
-
-    
