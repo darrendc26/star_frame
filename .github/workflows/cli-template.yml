@@ -28,7 +28,7 @@ jobs:
       - name: Setup Rust (nightly)
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: nightly-2025-01-01  # Recent nightly with resolver=3 support
           cache: false
 
       - name: Install Solana CLI v1.18.26
@@ -70,7 +70,6 @@ jobs:
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
           cd /tmp/test_project
           cargo +nightly build-sbf -- -Znext-lockfile-bump
-
 
       - name: Run Rust tests
         shell: bash
