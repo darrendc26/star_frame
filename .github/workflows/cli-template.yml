@@ -16,7 +16,7 @@ jobs:
   cli-template:
     runs-on: ubuntu-latest
     container:
-      image: solanalabs/solana:stable
+      image: solanalabs/solana:v1.18.25
 
     steps:
       - name: Checkout code
