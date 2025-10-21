@@ -78,3 +78,4 @@ fn generate_idl() -> Result<()> {
     Ok(())
 }
 
+// test
