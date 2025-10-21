@@ -32,13 +32,14 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           cache: 'false'
-          toolchain: '1.83'  # or 'beta' or 'nightly'
+          toolchain: nightly
 
       - name: Set default Rust toolchain and update
         run: |
-          rustup default 1.83  # Match the toolchain above
-          rustup update
+          rustup default nightly
+          rustup update nightly
           cargo --version
+          rustc --version
 
       # - name: Install cargo-release
       #   uses: taiki-e/install-action@v2
