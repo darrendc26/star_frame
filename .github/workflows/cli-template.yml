@@ -15,8 +15,8 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    container:
-      image: solanalabs/solana:edge
+    # container:
+    #   image: solanalabs/solana:edge
 
 
     steps:
@@ -44,6 +44,10 @@ jobs:
       #   uses: taiki-e/install-action@v2
       #   with:
       #     tool: cargo-release@0.25.17
+
+      - name: Install Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.14.13/install)"
 
       - name: Verify Solana installation
         run: |
