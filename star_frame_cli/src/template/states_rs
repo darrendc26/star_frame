@@ -29,4 +29,4 @@ impl AccountValidate<Authority> for CounterAccount {
 }
 
 
-//  
+//  TODO: Add your state structs here
