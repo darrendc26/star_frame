@@ -31,12 +31,11 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           cache: 'false'
-          toolchain: '1.83.0'
+          toolchain: 'nightly'
 
       - name: Verify Rust and Solana CLI
         run: |
-          rustup default 1.83.0
-          rustup update 1.83.0
+          rustup default nightly
           cargo --version
           solana --version
 
@@ -54,6 +53,11 @@ jobs:
         run: |
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
+          
+      - name: Generate lockfile with resolver 3
+        run: |
+          cd /tmp/test_project
+          cargo generate-lockfile
 
       - name: Build SBF program
         run: |
