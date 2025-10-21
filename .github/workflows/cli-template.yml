@@ -35,8 +35,11 @@ jobs:
 
       - name: Install Solana
         run: |
-          sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-
+          sudo apt-get update
+          sudo apt-get install -y curl ca-certificates
+          sudo update-ca-certificates
+          curl -sSfL https://release.solana.com/stable/install | sh
+     
       - name: Verify Rust and Solana CLI
         run: |
           rustup default nightly
