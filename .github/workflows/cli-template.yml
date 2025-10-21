@@ -31,7 +31,7 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           cache: 'false'
-          toolchain: '1.90.0'   # Use modern Cargo that supports resolver 3
+          toolchain: '1.90.0'
 
       - name: Verify Rust and Solana CLI
         run: |
@@ -49,7 +49,6 @@ jobs:
         run: |
           cd /tmp
           sf new test_project
-          # Remove any existing lockfiles to avoid conflicts
           find /tmp/test_project -name Cargo.lock -delete
 
       - name: Set Rust edition to 2021
@@ -57,14 +56,12 @@ jobs:
           cd /tmp/test_project
           sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
 
-      # - name: Install Solana BPF target
-      #   run: |
-      #     rustup toolchain add 1.90.0
-      #     rustup target add bpfel-unknown-unknown --toolchain 1.90.0
-
-
-      - name: Build and test project natively
+      - name: Build SBF program
         run: |
           cd /tmp/test_project
-          cargo build --release
+          cargo build-sbf --release
+
+      - name: Run tests
+        run: |
+          cd /tmp/test_project
           cargo test
