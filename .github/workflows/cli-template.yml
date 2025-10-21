@@ -16,7 +16,7 @@ jobs:
   cli-template:
     runs-on: ubuntu-latest
     container:
-      image: solanalabs/solana:v1.18.26
+      image: angho1230/solana:latest
 
     steps:
       - name: Checkout code
@@ -66,5 +66,5 @@ jobs:
       - name: Build and test project natively
         run: |
           cd /tmp/test_project
-          cargo build --release
+          cargo build-sbf
           cargo test
