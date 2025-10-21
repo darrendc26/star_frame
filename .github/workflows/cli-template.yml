@@ -15,8 +15,8 @@ on:
 jobs:
   cli-template:
     runs-on: ubuntu-latest
-    # container:
-    #   image: solanalabs/solana:edge
+    container:
+      image: solanalabs/solana:edge
 
     steps:
       - name: Checkout code
@@ -32,11 +32,6 @@ jobs:
         with:
           cache: 'false'
           toolchain: 'nightly'
-
-      - name: Setup Solana CLI
-        uses: metadaoproject/setup-solana@v1.0
-        with:
-          solana-cli-version: '1.10.32'
 
       - name: Verify Rust and Solana CLI
         run: |
