@@ -54,29 +54,9 @@ jobs:
           cd /tmp
           sf new test_project
 
-      - name: Set Rust edition to 2021
-        run: |
-          cd /tmp/test_project
-          sed -i 's/^edition\s*=\s*".*"/edition = "2021"/' Cargo.toml
-          
-      - name: Downgrade resolver for compatibility
-        run: |
-          cd /tmp/test_project
-          sed -i 's/^resolver\s*=\s*"3"/resolver = "2"/' Cargo.toml
-          
-      - name: Generate lockfile
-        run: |
-          cd /tmp/test_project
-          cargo generate-lockfile
-          
-      - name: Patch star_frame dependencies to use resolver 2
-        run: |
-          # Download dependencies first
-          cd /tmp/test_project
-          cargo fetch
-          # Patch all star_frame crates in the registry
-          find ~/.cargo/registry/src -name "Cargo.toml" -path "*/star_frame*/Cargo.toml" -exec sed -i 's/^resolver\s*=\s*"3"/resolver = "2"/' {} \;
-
+      - name: Install sbpf-linker
+        run: cargo install sbpf-linker     
+  
       - name: Build SBF program
         run: |
           cd /tmp/test_project
