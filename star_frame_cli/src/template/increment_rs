@@ -17,5 +17,3 @@ fn Increment(accounts: &mut IncrementAccounts) -> Result<()> {
     counter.count += 1;
     Ok(())
 }
-
-//  TODO: Add your instruction handlers here
