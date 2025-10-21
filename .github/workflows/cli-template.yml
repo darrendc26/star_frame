@@ -65,10 +65,13 @@ jobs:
       - name: Build SBF program
         shell: bash
         run: |
+          set -euxo pipefail
           source $HOME/.cargo/env
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+          solana-install update v1.18.26
           cd /tmp/test_project
-          cargo +nightly build-sbf -- -Znext-lockfile-bump
+          cargo +nightly build-sbf --verbose -- -Znext-lockfile-bump
+
 
       - name: Run Rust tests
         shell: bash
