@@ -65,5 +65,6 @@ jobs:
       - name: Build generated project
         run: |
           cd /tmp/test_project
+  
           cargo generate-lockfile
-          cargo build-sbf
+          cargo build-sbf -- -Znext-lockfile-bump 
