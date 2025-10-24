@@ -69,7 +69,7 @@ jobs:
           source $HOME/.cargo/env
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
           cd /tmp/test_project
-          cargo build --release
+          cargo build-sbf
 
       - name: Run Rust tests
         shell: bash
