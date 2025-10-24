@@ -15,6 +15,9 @@ default = ["token"]
 token = []
 idl = ["star_frame/idl"]
 
+[lib]
+crate-type = ["cdylib", "lib"]
+
 [dependencies]
 star_frame.workspace = true
 borsh.workspace = true
