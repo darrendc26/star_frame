@@ -76,6 +76,6 @@ jobs:
         run: |
           source $HOME/.cargo/env
           cd /tmp/test_project
-          cp target/release/libsf_proj.so target/release/test_project.so
+          cp test_project/target/release/libsf_proj.so test_project/target/release/test_project.so
 
           cargo test
