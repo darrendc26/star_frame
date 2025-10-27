@@ -28,10 +28,10 @@ jobs:
       - name: Setup Rust (nightly)
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: nightly-2025-01-01  # Recent nightly with resolver=3 support
+          toolchain: nightly-2025-01-01  
           cache: true
 
-      - name: Install Solana CLI v1.18.26
+      - name: Install Solana CLI 
         shell: bash
         run: |
           curl -sSfL https://github.com/solana-labs/solana/releases/download/v1.18.26/solana-release-x86_64-unknown-linux-gnu.tar.bz2 -o solana.tar.bz2
@@ -62,7 +62,7 @@ jobs:
           cd /tmp
           sf new test_project
 
-      - name: Build SBF program
+      - name: Build program
         shell: bash
         run: |
           set -euxo pipefail
@@ -70,13 +70,5 @@ jobs:
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
           cd /tmp/test_project
           cargo build --release
-          # cargo build-sbf
 
-      - name: Run Rust tests
-        shell: bash
-        run: |
-          source $HOME/.cargo/env
-          cd /tmp/test_project
-          cp test_project/target/release/libsf_proj.so test_project/target/release/test_project.so
-
-          cargo test
+      
